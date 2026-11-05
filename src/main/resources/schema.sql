@@ -1,6 +1,7 @@
 -- =============================================
 -- Script de creación de la base de datos
--- Gestión de Usuarios - Arquitectura Hexagonal
+-- Gestión de Usuarios y Empleados
+-- Arquitectura Hexagonal
 -- =============================================
 
 CREATE DATABASE IF NOT EXISTS crud_usuarios
@@ -8,6 +9,10 @@ CREATE DATABASE IF NOT EXISTS crud_usuarios
     COLLATE utf8mb4_unicode_ci;
 
 USE crud_usuarios;
+
+-- =============================================
+-- Tabla de usuarios
+-- =============================================
 
 CREATE TABLE IF NOT EXISTS users (
     id          VARCHAR(36)  NOT NULL PRIMARY KEY,
@@ -20,7 +25,23 @@ CREATE TABLE IF NOT EXISTS users (
     updated_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Usuario administrador inicial (password: Admin1234!)
+-- =============================================
+-- Tabla de empleados
+-- =============================================
+
+CREATE TABLE IF NOT EXISTS empleados (
+    id          VARCHAR(36)  NOT NULL PRIMARY KEY,
+    nombre      VARCHAR(100) NOT NULL,
+    documento   VARCHAR(30)  NOT NULL UNIQUE,
+    cargo       VARCHAR(100) NOT NULL,
+    salario     DECIMAL(15,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- =============================================
+-- Usuario administrador inicial
+-- Password: Admin1234!
+-- =============================================
+
 INSERT INTO users (id, name, email, password, role, status)
 VALUES (
     '00000000-0000-0000-0000-000000000001',
@@ -30,4 +51,3 @@ VALUES (
     'ADMIN',
     'ACTIVE'
 );
-

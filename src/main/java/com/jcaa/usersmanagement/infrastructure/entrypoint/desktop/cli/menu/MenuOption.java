@@ -13,6 +13,13 @@ public enum MenuOption {
   CREATE_USER(3, "Create user"),
   UPDATE_USER(4, "Update user"),
   DELETE_USER(5, "Delete user"),
+
+  LIST_EMPLEADOS(7, "List all employees"),
+  FIND_EMPLEADO(8, "Find employee by ID"),
+  CREATE_EMPLEADO(9, "Create employee"),
+  UPDATE_EMPLEADO(10, "Update employee"),
+  DELETE_EMPLEADO(11, "Delete employee"),
+
   LOGIN(6, "Login"),
   EXIT(0, "Exit");
 
