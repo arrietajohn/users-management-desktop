@@ -27,7 +27,7 @@ import com.jcaa.usersmanagement.infrastructure.adapter.email.JavaMailEmailSender
 import com.jcaa.usersmanagement.infrastructure.adapter.email.SmtpConfig;
 import com.jcaa.usersmanagement.infrastructure.adapter.persistence.config.DatabaseConfig;
 import com.jcaa.usersmanagement.infrastructure.adapter.persistence.config.DatabaseConnectionFactory;
-import com.jcaa.usersmanagement.infrastructure.adapter.persistence.repository.PersonaRepositoryInMemory;
+import com.jcaa.usersmanagement.infrastructure.adapter.persistence.repository.PersonaRepositoryMySQL;
 import com.jcaa.usersmanagement.infrastructure.adapter.persistence.repository.UserRepositoryMySQL;
 import com.jcaa.usersmanagement.infrastructure.entrypoint.desktop.controller.PersonaController;
 import com.jcaa.usersmanagement.infrastructure.entrypoint.desktop.controller.UserController;
@@ -88,8 +88,8 @@ public final class DependencyContainer {
             getAllUsersUseCase,
             loginUseCase);
 
-    // Casos de uso de Persona: persistencia en memoria.
-    final PersonaRepositoryInMemory personaRepository = new PersonaRepositoryInMemory();
+    // Casos de uso de Persona: persistencia relacional mediante MySQL.
+    final PersonaRepositoryMySQL personaRepository = new PersonaRepositoryMySQL(connection);
 
     final CreatePersonaUseCase createPersonaUseCase =
         new CreatePersonaService(personaRepository, personaRepository, validator);
