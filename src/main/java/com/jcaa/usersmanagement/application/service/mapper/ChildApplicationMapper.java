@@ -1,6 +1,7 @@
 package com.jcaa.usersmanagement.application.service.mapper;
 
 import com.jcaa.usersmanagement.application.service.dto.command.CreateChildCommand;
+import com.jcaa.usersmanagement.application.service.dto.query.GetChildByIdQuery;
 import com.jcaa.usersmanagement.domain.enums.GuardianRelationship;
 import com.jcaa.usersmanagement.domain.exception.InvalidChildDatesException;
 import com.jcaa.usersmanagement.domain.model.ChildModel;
@@ -29,6 +30,10 @@ public class ChildApplicationMapper {
         toAddress(command.address()),
         new GuardianId(command.guardianId()),
         GuardianRelationship.fromString(command.guardianRelationship()));
+  }
+
+  public ChildId fromGetChildByIdQueryToChildId(final GetChildByIdQuery query) {
+    return new ChildId(query.id());
   }
 
   private LocalDate parseDate(final String field, final String value) {
