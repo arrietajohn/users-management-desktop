@@ -1,23 +1,35 @@
 package com.jcaa.usersmanagement.infrastructure.config;
 
+import com.jcaa.usersmanagement.application.port.in.CreateChildUseCase;
 import com.jcaa.usersmanagement.application.port.in.CreateUserUseCase;
+import com.jcaa.usersmanagement.application.port.in.DeleteChildUseCase;
 import com.jcaa.usersmanagement.application.port.in.DeleteUserUseCase;
+import com.jcaa.usersmanagement.application.port.in.GetAllChildrenUseCase;
 import com.jcaa.usersmanagement.application.port.in.GetAllUsersUseCase;
+import com.jcaa.usersmanagement.application.port.in.GetChildByIdUseCase;
 import com.jcaa.usersmanagement.application.port.in.GetUserByIdUseCase;
 import com.jcaa.usersmanagement.application.port.in.LoginUseCase;
+import com.jcaa.usersmanagement.application.port.in.UpdateChildUseCase;
 import com.jcaa.usersmanagement.application.port.in.UpdateUserUseCase;
+import com.jcaa.usersmanagement.application.service.CreateChildService;
 import com.jcaa.usersmanagement.application.service.CreateUserService;
+import com.jcaa.usersmanagement.application.service.DeleteChildService;
 import com.jcaa.usersmanagement.application.service.DeleteUserService;
 import com.jcaa.usersmanagement.application.service.EmailNotificationService;
+import com.jcaa.usersmanagement.application.service.GetAllChildrenService;
 import com.jcaa.usersmanagement.application.service.GetAllUsersService;
+import com.jcaa.usersmanagement.application.service.GetChildByIdService;
 import com.jcaa.usersmanagement.application.service.GetUserByIdService;
 import com.jcaa.usersmanagement.application.service.LoginService;
+import com.jcaa.usersmanagement.application.service.UpdateChildService;
 import com.jcaa.usersmanagement.application.service.UpdateUserService;
 import com.jcaa.usersmanagement.infrastructure.adapter.email.JavaMailEmailSenderAdapter;
 import com.jcaa.usersmanagement.infrastructure.adapter.email.SmtpConfig;
 import com.jcaa.usersmanagement.infrastructure.adapter.persistence.config.DatabaseConfig;
 import com.jcaa.usersmanagement.infrastructure.adapter.persistence.config.DatabaseConnectionFactory;
+import com.jcaa.usersmanagement.infrastructure.adapter.persistence.repository.ChildRepositoryMySQL;
 import com.jcaa.usersmanagement.infrastructure.adapter.persistence.repository.UserRepositoryMySQL;
+import com.jcaa.usersmanagement.infrastructure.entrypoint.desktop.controller.ChildController;
 import com.jcaa.usersmanagement.infrastructure.entrypoint.desktop.controller.UserController;
 
 import java.sql.Connection;
@@ -39,6 +51,7 @@ public final class DependencyContainer {
   private static final String SMTP_FROM_NAME = "smtp.from.name";
 
   private final UserController userController;
+  private final ChildController childController;
 
   public DependencyContainer() {
     final AppProperties properties = new AppProperties();
@@ -71,10 +84,35 @@ public final class DependencyContainer {
             getUserByIdUseCase,
             getAllUsersUseCase,
             loginUseCase);
+
+    final ChildRepositoryMySQL childRepository = new ChildRepositoryMySQL(connection);
+
+    final CreateChildUseCase createChildUseCase =
+        new CreateChildService(childRepository, childRepository, validator);
+    final UpdateChildUseCase updateChildUseCase =
+        new UpdateChildService(childRepository, childRepository, validator);
+    final DeleteChildUseCase deleteChildUseCase =
+        new DeleteChildService(childRepository, childRepository, validator);
+    final GetChildByIdUseCase getChildByIdUseCase =
+        new GetChildByIdService(childRepository, validator);
+    final GetAllChildrenUseCase getAllChildrenUseCase =
+        new GetAllChildrenService(childRepository);
+
+    this.childController =
+        new ChildController(
+            createChildUseCase,
+            updateChildUseCase,
+            deleteChildUseCase,
+            getChildByIdUseCase,
+            getAllChildrenUseCase);
   }
 
   public UserController userController() {
     return userController;
+  }
+
+  public ChildController childController() {
+    return childController;
   }
 
   private static Connection buildDatabaseConnection(final AppProperties properties) {
