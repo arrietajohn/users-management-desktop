@@ -17,7 +17,7 @@ import com.jcaa.usersmanagement.infrastructure.adapter.email.JavaMailEmailSender
 import com.jcaa.usersmanagement.infrastructure.adapter.email.SmtpConfig;
 import com.jcaa.usersmanagement.infrastructure.adapter.persistence.config.DatabaseConfig;
 import com.jcaa.usersmanagement.infrastructure.adapter.persistence.config.DatabaseConnectionFactory;
-import com.jcaa.usersmanagement.infrastructure.adapter.persistence.repository.UserRepositoryMySQL;
+import com.jcaa.usersmanagement.infrastructure.adapter.persistence.repository.UserRepositorySqlServer;
 import com.jcaa.usersmanagement.infrastructure.entrypoint.desktop.controller.UserController;
 
 import java.sql.Connection;
@@ -44,7 +44,7 @@ public final class DependencyContainer {
     final AppProperties properties = new AppProperties();
 
     final Connection connection = buildDatabaseConnection(properties);
-    final UserRepositoryMySQL userRepository = new UserRepositoryMySQL(connection);
+    final UserRepositorySqlServer userRepository = new UserRepositorySqlServer(connection);
 
     final JavaMailEmailSenderAdapter emailSender =
         new JavaMailEmailSenderAdapter(buildSmtpConfig(properties));
