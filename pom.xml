@@ -15,6 +15,7 @@
     <!-- Versiones de dependencias -->
     <lombok.version>1.18.36</lombok.version>
     <mysql.connector.version>9.3.0</mysql.connector.version>
+    <mssql.jdbc.version>12.8.1.jre11</mssql.jdbc.version>
     <slf4j.version>2.0.16</slf4j.version>
     <javamail.version>1.6.2</javamail.version>
     <bcrypt.version>0.10.2</bcrypt.version>
@@ -38,6 +39,13 @@
       <groupId>com.mysql</groupId>
       <artifactId>mysql-connector-j</artifactId>
       <version>${mysql.connector.version}</version>
+    </dependency>
+
+    <!-- Microsoft SQL Server JDBC Driver (JDBC puro, sin ORM) -->
+    <dependency>
+      <groupId>com.microsoft.sqlserver</groupId>
+      <artifactId>mssql-jdbc</artifactId>
+      <version>${mssql.jdbc.version}</version>
     </dependency>
 
     <!-- JavaMail API -->
