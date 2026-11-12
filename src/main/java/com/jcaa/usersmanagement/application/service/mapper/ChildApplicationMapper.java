@@ -1,6 +1,7 @@
 package com.jcaa.usersmanagement.application.service.mapper;
 
 import com.jcaa.usersmanagement.application.service.dto.command.CreateChildCommand;
+import com.jcaa.usersmanagement.application.service.dto.command.UpdateChildCommand;
 import com.jcaa.usersmanagement.application.service.dto.query.GetChildByIdQuery;
 import com.jcaa.usersmanagement.domain.enums.GuardianRelationship;
 import com.jcaa.usersmanagement.domain.exception.InvalidChildDatesException;
@@ -36,12 +37,35 @@ public class ChildApplicationMapper {
     return new ChildId(query.id());
   }
 
+  public ChildModel fromUpdateCommandToModel(final UpdateChildCommand command) {
+    return new ChildModel(
+        new ChildId(command.id()),
+        new ChildFullName(
+            command.firstName(),
+            command.secondName(),
+            command.firstSurname(),
+            command.secondSurname()),
+        parseDate("birth date", command.birthDate()),
+        parseDate("admission date", command.admissionDate()),
+        parseOptionalDate("discharge date", command.dischargeDate()),
+        toAddress(command.address()),
+        new GuardianId(command.guardianId()),
+        GuardianRelationship.fromString(command.guardianRelationship()));
+  }
+
   private LocalDate parseDate(final String field, final String value) {
     try {
       return LocalDate.parse(value);
     } catch (final DateTimeParseException exception) {
       throw InvalidChildDatesException.becauseDateFormatIsInvalid(field, value);
     }
+  }
+
+  private LocalDate parseOptionalDate(final String field, final String value) {
+    if (Objects.isNull(value) || value.isBlank()) {
+      return null;
+    }
+    return parseDate(field, value);
   }
 
   private ChildAddress toAddress(final String value) {
